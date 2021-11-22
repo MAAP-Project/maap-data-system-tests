@@ -1,0 +1,49 @@
+name: System Tests
+on:
+  push:
+    branches:
+      - main
+      - staging
+  workflow_dispatch:
+      inputs:
+        name:
+          description: 'Stage'
+          required: true
+          default: 'production'
+  schedule:
+   - cron:  '0 0 * * *' # daily
+  pull_request:
+    branches:
+      - main
+
+# env:
+
+jobs:
+  pre-commit-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - uses: actions/checkout@v2
+
+      # - uses: franzbischoff/replace_envs@v1
+      #   env:
+      #     STAGE: ${{ steps.extract_branch.outputs.branch }}
+      #   with:
+      #     from_file: 'stack/config.yml.example'
+      #     to_file: 'stack/config.yml'
+      #     commit: 'false'
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      - run: python --version
+      
+      - run: pip install -r requirements.txt
+
+      - run: papermill system-tests.ipynb system-tests-executed.ipynb -p my_param 1
