@@ -1,16 +1,20 @@
 name: System Tests
 on:
+  push:
+    branches:
+      - main
+      - staging
   workflow_dispatch:
       inputs:
         name:
           description: 'Stage'
           required: true
           default: 'production'
+  schedule:
+   - cron:  '0 0 * * *' # daily
   pull_request:
     branches:
       - main
-  # schedule:
-    # - cron:  '0 0 * * *' # daily
 
 # env:
 
