@@ -19,7 +19,7 @@ on:
 # env:
 
 jobs:
-  pre-commit-check:
+  system-test:
     runs-on: ubuntu-latest
     steps:
       - name: Extract branch name
