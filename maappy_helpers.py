@@ -15,11 +15,4 @@ def fetch_results(maap, collection={}, query={}, timeout=180):
       # max waiting period for a response in seconds
       timeout = timeout
     )
-    # if the 'Content-Type' is json, creates variable with json version of the response
-    if (response.headers.get("Content-Type") == "application/json"):
-        data = response.json()
-    # if the 'Content-Type' is not json, creates variable with unicode content of the response
-    else:
-        data = response.text
-    # returns `data` as json string
-    return json.loads(data)
+    return json.loads(response.text)
