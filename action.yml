@@ -1,16 +1,16 @@
 # action.yml
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Run Jupyter Notebook'
+description: 'Run a Jupyter Notebook to test MAAP services'
 # inputs:
-  # who-to-greet:  # id of input
-    # description: 'Who to greet'
+  # arg_1:  # id of input
+    # description: 'Argument One'
     # required: true
-    # default: 'World'
+    # default: 'Foo'
 # outputs:
-  # time: # id of output
-    # description: 'The time we greeted you'
+  # output_1: # id of output
+    # description: 'The result'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   # args:
-    # - ${{ inputs.who-to-greet }}
+    # - ${{ inputs.arg_1 }}
