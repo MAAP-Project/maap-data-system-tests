@@ -39,11 +39,11 @@ jobs:
 
       # To use this repository's private action,
       # you must check out the repository
-      - name: Hello world action step
-        uses: ./ # Uses an action in the root directory
-        # id: hello
+      - name: Run the tests
+        uses: ./
+        id: test_run
         # with:
-          # who-to-greet: 'Mona the Octocat'
-      # Use the output from the `hello` step
-      # - name: Get the output time
-        # run: echo "The time was ${{ steps.hello.outputs.time }}"
+          # arg_1: 'Bar'
+      # Use the output from the test run step
+      # - name: Get the output
+        # run: echo "The time was ${{ steps.test_run.outputs.output_1 }}"
