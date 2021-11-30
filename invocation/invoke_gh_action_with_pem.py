@@ -2,7 +2,6 @@ import jwt
 import time
 import requests
 import argparse
-import os
 
 
 def main():
@@ -13,7 +12,7 @@ def main():
     parser.add_argument(
         "--branch", required=True,
         help="The branch/stage on which the tests are being invoked"
-    ) # extracted from the execution branch
+    )  # extracted from the execution branch
 
     parser.add_argument(
         "--private_key", required=True,
