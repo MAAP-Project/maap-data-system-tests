@@ -1,44 +1,70 @@
 # MAAP Data System Services System Tests
 
 - [MAAP Data System Services System Tests](#maap-data-system-services-system-tests)
-  - [Running GitHub Actions locally](#running-github-actions-locally)
-  - [Papermill CLI](#papermill-cli)
-  - [Docker Container Action](#docker-container-action)
   - [GitHub App Creation and Installation](#github-app-creation-and-installation)
-  - [Invoking the Repository Workflow with GitHub App Authentication](#invoking-the-repository-workflow-with-github-app-authentication)
-
-## Running GitHub Actions locally
-
-https://github.com/nektos/act
-
-## Papermill CLI
-
-https://papermill.readthedocs.io/en/latest/usage-cli.html
-
-## Docker Container Action
-
-https://docs.github.com/en/actions/creating-actions/creating-a-docker-container-action
+  - [GitHub Docker Container Action Creation](#github-docker-container-action-creation)
+  - [Invoking the Repository Workflow from another Repo](#invoking-the-repository-workflow-from-another-repo)
+  - [Manually Invoking the Repository Workflow with GitHub App Authentication](#manually-invoking-the-repository-workflow-with-github-app-authentication)
+  - [Running the notebook manually](#running-the-notebook-manually)
+  - [References](#references)
 
 ## GitHub App Creation and Installation
 
-The GitHub App is used as the principal in GitHub that has been granted fine-grained permissions
-to perform actions in this repo. In this case, it's only to invoke the workflow_dispatch Action.
+The GitHub App is used as the authentication principal in GitHub that has been granted
+fine-grained permissions to perform actions in this repo. In this case, the only permission
+granted is to invoke the `workflow_dispatch` Action.
 
 The [Creating a GitHub App
-](https://docs.github.com/en/developers/apps/building-github-apps/creating-a-github-app) describes how to create a new app. The relevant permission for this app is "Actions", and "Read and Write" is required to invoke a workflow dispatch.  Homepage URL is required, but can just be set to https://www.maap-project.org. Add a private key to get a PEM that can be used in the auth steps if there hasn't been one created yet.
+](https://docs.github.com/en/developers/apps/building-github-apps/creating-a-github-app) describes how to create a new app. The relevant permission for this app is "Actions", and "Read and Write" is required to invoke a workflow dispatch.  Homepage URL is required, but can just be set to `https://www.maap-project.org`. Add a private key to get a PEM that can be used in the auth steps if one has not yet been created.
 
-Go to the installations page (e.g., https://github.com/settings/apps/maap-system-tests/installations), click the Install button for the organization you wish to install it in. Choose the radio button "Only select repositories" and then choose the repo that will have it's workflow invoked, e.g., maap-data-system-tests, and click the Install button. You can now use the PEM for the App to invoke the workflow in that repo.
+Go to the installations page (e.g., https://github.com/settings/apps/maap-system-tests/installations), click the Install button for the organization you wish to install it in. Choose the radio button "Only select repositories" and then choose the repo that will have it's workflow invoked, e.g., maap-data-system-tests, and click the Install button. You can now use the App's PEM to invoke the workflow in that repo.
 
-## Invoking the Repository Workflow with GitHub App Authentication
+## GitHub Docker Container Action Creation
+
+The file [action.yml](action.yml) defines a GitHub Docker Container Action that builds an runs the [Dockerfile in this repo](Dockerfile). This can either be built and published to the GitHub Marketplace (recommended) or built and used with each invocation. Currently, the latter method is used in [.github/workflows/test.yml](.github/workflows/test.yml) with:
+
+```
+- name: Run the tests
+  uses: ./
+  id: test_run
+```
+
+This has the drawback that the Docker image layers must be pulled from GitLab on every invocation, whereas deploying the Action to the GitHub Marketplace would (presumably) cache them in the GitHub repository, which is (presumably) faster to retrieve from.
+
+## Invoking the Repository Workflow from another Repo
+
+The typical usage pattern will be for service repos to invoke the tests after they deploy.
+This describes how to set that up for such as service repo.
+
+The GitHub Action [invoke_system_tests.yml](
+https://github.com/MAAP-Project/fake-service-for-invoking-system-tests/blob/main/.github/workflows/invoke_system_tests.yml) is an example of doing a checkout of the system tests repo, installing the necessary Python dependencies, and running the workflow invocation script [invocation/invoke_gh_action_with_pem.py](invocation/invoke_gh_action_with_pem.py) with the appropriate configuration.
+
+There is secret that must be created named `PEM`. This should be set to the contents of the App's PEM file, including new lines (e.g., just cut and paste it into the Secret textarea.
+
+The invocation of the script will usually take two parameters:
+
+- `--branch` to determine which branch of the repo should be used (which also determines the deployment stage/environment to use)
+- `--private_key` for the PEM.
+
+Additionally, these parameters can be passed, through the default values in the script should be correct for all invocations.
+
+- `--issuer` the GitHub App's identifier, used for the JWT issuer field
+- `--installation_id` the GitHub App's installation id when installed in this repo
+- `--repo` the GitHub repo on which to invoke the workflow dispatch, which should be this repo (MAAP-Project/maap-data-system-tests)
+- `--workflow` the workflow to dispatch, by default, [test.yml](.github/workflows/test.yml)
+
+## Manually Invoking the Repository Workflow with GitHub App Authentication
+
+The workflow can be manually invoked when testing it using the following steps.
 
 0. The App is [https://github.com/settings/apps/maap-system-tests](https://github.com/settings/apps/maap-system-tests). It's currently part of Phil's account, but will be moved to the MAAP-Project org as soon as we can coordinate it.
 
-1. Copy the PEM file (maap-system-tests.2021-11-23.private-key.pem) into this directory.
+1. Copy the PEM file (e.g., maap-system-tests.2021-11-23.private-key.pem) somewhere.
 
-2. Use the PEM to generate a JWT token.
+2. Use the PEM file to generate a JWT token.
 
 ```
-JWT_TOKEN=$(./generate_jwt.rb)
+JWT_TOKEN=$(python ./invocation/generate_jwt.py --pem maap-system-tests.2021-11-23.private-key.pem)
 ```
 
 3. Find the Installation ID of the App
@@ -62,11 +88,22 @@ This ID will change each time the App is installed, so if you start getting erro
 API_TOKEN=$(curl -s -X POST -H "Authorization: Bearer ${JWT_TOKEN}" -H 'Accept: application/vnd.github.v3+json' https://api.github.com/app/installations/${INSTALLATION_ID}/access_tokens | jq -r .token)
 ```
 
-4. Use the API token to invoke the GitHub Actions Workflow Dispatch endpoint. This returns
+5. Use the API token to invoke the GitHub Actions Workflow Dispatch endpoint. This returns
    a 204 No Content status code on success.
 
 ```
 curl -s -o /dev/null -w "%{http_code}\n" -X POST -H "Authorization: Bearer ${API_TOKEN}" -H 'Accept: application/vnd.github.v3+json' -d '{"ref":"main"}' https://api.github.com/repos/MAAP-Project/maap-data-system-tests/actions/workflows/test.yml/dispatches
 ```
 
-5. Go to the [System Tests Workflow](https://github.com/MAAP-Project/maap-data-system-tests/actions/workflows/test.yml) page to see that the workflow is running.
+6. Go to the [System Tests Workflow](https://github.com/MAAP-Project/maap-data-system-tests/actions/workflows/test.yml) page to see that the workflow is running.
+
+## Running the notebook manually
+
+1. Install the Python dependencies with `pip install -r requirements.txt`
+2. Run with `papermill system-tests.ipynb system-tests-out.ipynb`
+
+## References
+
+- Running GitHub Actions locally using act: https://github.com/nektos/act
+- Papermill CLI: https://papermill.readthedocs.io/en/latest/usage-cli.html
+- Docker Container Action: https://docs.github.com/en/actions/creating-actions/creating-a-docker-container-action
