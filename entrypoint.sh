@@ -3,4 +3,4 @@
 set -Eeuo pipefail
 set -x # print each command before executing
 
-python harness.py $1
+python harness.py --stage $1
