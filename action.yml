@@ -1,16 +1,15 @@
 # action.yml
 name: 'Run Jupyter Notebook'
 description: 'Run a Jupyter Notebook to test MAAP services'
-# inputs:
-  # arg_1:  # id of input
-    # description: 'Argument One'
-    # required: true
-    # default: 'Foo'
+inputs:
+  stage:
+    description: Stage / environment on which the tests will be invoked
+    required: true
 # outputs:
   # output_1: # id of output
     # description: 'The result'
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  # args:
-    # - ${{ inputs.arg_1 }}
+  args:
+    - ${{ inputs.stage }}

@@ -29,21 +29,12 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      # - uses: franzbischoff/replace_envs@v1
-      #   env:
-      #     STAGE: ${{ steps.extract_branch.outputs.branch }}
-      #   with:
-      #     from_file: 'stack/config.yml.example'
-      #     to_file: 'stack/config.yml'
-      #     commit: 'false'
-
-      # To use this repository's private action,
-      # you must check out the repository
       - name: Run the tests
         uses: ./
         id: test_run
-        # with:
-          # arg_1: 'Bar'
+        with:
+          stage: ${{ steps.extract_branch.outputs.branch }}
+
       # Use the output from the test run step
       # - name: Get the output
         # run: echo "The time was ${{ steps.test_run.outputs.output_1 }}"
