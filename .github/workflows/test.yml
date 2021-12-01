@@ -11,7 +11,7 @@ on:
           required: true
           default: 'production'
   schedule:
-   - cron:  '3 45 * * *' # daily
+   - cron:  '43 3 * * *' # daily
   pull_request:
     branches:
       - main
