@@ -5,7 +5,9 @@
   - [GitHub Docker Container Action Creation](#github-docker-container-action-creation)
   - [Invoking the Repository Workflow from another Repo](#invoking-the-repository-workflow-from-another-repo)
   - [Manually Invoking the Repository Workflow with GitHub App Authentication](#manually-invoking-the-repository-workflow-with-github-app-authentication)
-  - [Running the notebook manually](#running-the-notebook-manually)
+  - [Running the Notebook Manually](#running-the-notebook-manually)
+  - [Notebook Input Parameters](#notebook-input-parameters)
+  - [Installing maap-py](#installing-maap-py)
   - [References](#references)
 
 ## GitHub App Creation and Installation
@@ -97,10 +99,27 @@ curl -s -o /dev/null -w "%{http_code}\n" -X POST -H "Authorization: Bearer ${API
 
 6. Go to the [System Tests Workflow](https://github.com/MAAP-Project/maap-data-system-tests/actions/workflows/test.yml) page to see that the workflow is running.
 
-## Running the notebook manually
+## Running the Notebook Manually
 
 1. Install the Python dependencies with `pip install -r requirements.txt`
 2. Run with `papermill system-tests.ipynb system-tests-out.ipynb`
+
+## Notebook Input Parameters
+
+Notebooks will always need input parameters, if for no more than to know which stage to run the tests
+against. When running with Papermill, create a cell tagged with "parameters". Papermill will then
+inject a cell after this one with all of the passed parameters as Python variables with assignments.
+
+## Installing maap-py
+
+1. Switch to your virtual environment that you wish to install in.
+2. `pip install matplotlib==3.3.1` 
+3. Clone maap-py with `git clone git@github.com:MAAP-Project/maap-py.git`
+4. `cd maap-py` then `python setup.py install`
+
+
+
+docker run -it --entrypoint /bin/bash mas.ops.maap-project.org/root/jupyter-image/vanilla:develop
 
 ## References
 
