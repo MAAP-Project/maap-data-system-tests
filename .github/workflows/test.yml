@@ -38,5 +38,5 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: notebook-results
-          path: *-output.ipynb
+          path: '*-output.ipynb'
           if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
