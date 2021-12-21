@@ -22,19 +22,21 @@ jobs:
   system-test:
     runs-on: ubuntu-latest
     steps:
-      - shell: bash
+      - name: Extract branch name
+        shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
 
       - uses: actions/checkout@v2
 
-      - uses: ./
+      - name: Run the tests
+        uses: ./
         id: test_run
         with:
           stage: ${{ steps.extract_branch.outputs.branch }}
 
-      - uses: actions/upload-artifact@v2
+      - name: Upload Notebook Output
+        uses: actions/upload-artifact@v2
         with:
-          name: notebook-results
           path: '*-output.ipynb'
           if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
