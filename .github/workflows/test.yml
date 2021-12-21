@@ -22,15 +22,13 @@ jobs:
   system-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Extract branch name
-        shell: bash
+      - shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
 
       - uses: actions/checkout@v2
 
-      - name: Run the tests
-        uses: ./
+      - uses: ./
         id: test_run
         with:
           stage: ${{ steps.extract_branch.outputs.branch }}
