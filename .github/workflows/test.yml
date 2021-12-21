@@ -35,6 +35,8 @@ jobs:
         with:
           stage: ${{ steps.extract_branch.outputs.branch }}
 
-      # Use the output from the test run step
-      # - name: Get the output
-        # run: echo "The time was ${{ steps.test_run.outputs.output_1 }}"
+      - uses: actions/upload-artifact@v2
+        with:
+          name: notebook-results
+          path: *-output.ipynb
+          if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
