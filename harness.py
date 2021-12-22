@@ -2,6 +2,7 @@ import papermill as pm
 import glob
 import re
 import argparse
+import os
 
 
 def main():
@@ -21,13 +22,18 @@ def main():
     if re.fullmatch(r"refs/pull/\d+/merge", stage):
         stage = "dit"
 
+    output_path_prefix = os.environ.get("GITHUB_WORKSPACE", "")
+
     for filename in [f for f in glob.glob("./*.ipynb") if not f.endswith("-output.ipynb")]:
         try:
+            output_filename = re.sub(
+                " ^ (.*)\.ipynb$", r"\1-output.ipynb", filename)
             pm.execute_notebook(
-                filename,
-                re.sub("^(.*)\.ipynb$", r"\1-output.ipynb", filename),
+                input_path=filename,
+                output_path=f"{output_path_prefix}/{output_filename}",
                 parameters={"stage": stage},
-                progress_bar=False
+                progress_bar=False,
+
             )
             success_results.append(filename)
         except pm.exceptions.PapermillExecutionError as e:
