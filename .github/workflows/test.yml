@@ -45,8 +45,8 @@ jobs:
         with:
           stage: ${{ env.STAGE }} 
 
-      - name: Upload Notebook Output
-        uses: actions/upload-artifact@v2
-        with:
-          path: '*-output.ipynb'
-          if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
+      # - name: Upload Notebook Output
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     path: '*-output.ipynb'
+      #     if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
