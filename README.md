@@ -117,10 +117,6 @@ inject a cell after this one with all of the passed parameters as Python variabl
 3. Clone maap-py with `git clone git@github.com:MAAP-Project/maap-py.git`
 4. `cd maap-py` then `python setup.py install`
 
-
-
-docker run -it --entrypoint /bin/bash mas.ops.maap-project.org/root/jupyter-image/vanilla:develop
-
 ## References
 
 - Running GitHub Actions locally using act: https://github.com/nektos/act
