@@ -26,9 +26,9 @@ def main():
 
     for input_path in [f for f in glob.glob("./*.ipynb") if not f.endswith("-output.ipynb")]:
         try:
-            output_path = re.sub(
+            output_path_filename = re.sub(
                 " ^ (.*)\.ipynb$", r"\1-output.ipynb", input_path)
-            print(f"output_path: {output_path}")
+            output_path = f"{output_path_prefix}/{output_path_filename}"
             pm.execute_notebook(
                 input_path=input_path,
                 output_path=output_path,

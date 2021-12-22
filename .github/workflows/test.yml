@@ -37,7 +37,7 @@ jobs:
         run: echo "STAGE=${{ github.event.inputs.stage }}" >> $GITHUB_ENV
         if: github.event.inputs.stage
 
-      - run: echo "${{ env.STAGE }}"  
+      - run: echo "Stage is ${{ env.STAGE }}"  
 
       - name: Run the tests
         uses: ./
