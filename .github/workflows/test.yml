@@ -6,9 +6,9 @@ on:
       - staging
   workflow_dispatch:
       inputs:
-        name:
+        stage:
           description: 'Stage'
-          required: true
+          required: false
           default: 'production'
   schedule:
    - cron:  '43 3 * * *' # daily
@@ -22,18 +22,28 @@ jobs:
   system-test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      
       - name: Extract branch name
+        id: extract_branch
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
 
-      - uses: actions/checkout@v2
+      - name: Determine the default stage for this run
+        run: echo "STAGE=${{ steps.extract_branch.outputs.branch }}" >> $GITHUB_ENV
+        if: steps.extract_branch.outputs.branch
+
+      - name: Determine the stage for this run if overridden by the workflow_dispatch event
+        run: echo "STAGE=${{ github.event.inputs.stage }}" >> $GITHUB_ENV
+        if: github.event.inputs.stage
+
+      - run: echo "${{ env.STAGE }}"  
 
       - name: Run the tests
         uses: ./
         id: test_run
         with:
-          stage: ${{ steps.extract_branch.outputs.branch }}
+          stage: ${{ env.STAGE }} 
 
       - name: Upload Notebook Output
         uses: actions/upload-artifact@v2
