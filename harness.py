@@ -24,20 +24,20 @@ def main():
 
     output_path_prefix = os.environ.get("GITHUB_WORKSPACE", "")
 
-    for filename in [f for f in glob.glob("./*.ipynb") if not f.endswith("-output.ipynb")]:
+    for input_path in [f for f in glob.glob("./*.ipynb") if not f.endswith("-output.ipynb")]:
         try:
-            output_filename = re.sub(
-                " ^ (.*)\.ipynb$", r"\1-output.ipynb", filename)
+            output_path = re.sub(
+                " ^ (.*)\.ipynb$", r"\1-output.ipynb", input_path)
+            print(f"output_path: {output_path}")
             pm.execute_notebook(
-                input_path=filename,
-                output_path=f"{output_path_prefix}/{output_filename}",
+                input_path=input_path,
+                output_path=output_path,
                 parameters={"stage": stage},
                 progress_bar=False,
-
             )
-            success_results.append(filename)
+            success_results.append(input_path)
         except pm.exceptions.PapermillExecutionError as e:
-            failure_results[filename] = e
+            failure_results[input_path] = e
 
     if failure_results:
         print("Failures:")
