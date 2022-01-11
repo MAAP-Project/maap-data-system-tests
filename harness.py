@@ -44,8 +44,12 @@ def main():
         for (k, v) in failure_results.items():
             print(f"File {k} => {v}")
         exit(1)
-    else:
-        exit(0)
+
+    print(f"Successfully ran {len(success_results)} test notebooks.")
+    for x in success_results:
+        print(f"File {x}")
+
+    exit(0)
 
 
 if __name__ == "__main__":
