@@ -24,7 +24,7 @@ def main():
 
     output_path_prefix = os.environ.get("GITHUB_WORKSPACE", "")
 
-    for input_path in [f for f in glob.glob("./*.ipynb") if not f.endswith("-output.ipynb")]:
+    for input_path in [f for f in glob.glob("./tests/g*.ipynb") if not f.endswith("-output.ipynb")]:
         try:
             output_path_filename = re.sub(
                 " ^ (.*)\.ipynb$", r"\1-output.ipynb", input_path)
