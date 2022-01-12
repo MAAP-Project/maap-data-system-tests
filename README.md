@@ -106,7 +106,7 @@ curl -s -o /dev/null -w "%{http_code}\n" -X POST -H "Authorization: Bearer ${API
 ## Running the Notebook Manually
 
 1. Install the Python dependencies with `pip install -r requirements.txt`
-2. Run with `papermill system-tests.ipynb system-tests-out.ipynb`
+2. Run with `papermill system-tests.ipynb system-tests-output.ipynb`
 
 ## Notebook Input Parameters
 

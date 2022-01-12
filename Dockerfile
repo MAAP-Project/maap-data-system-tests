@@ -1,6 +1,8 @@
 FROM mas.ops.maap-project.org/root/jupyter-image/vanilla:develop
 
-RUN pip install pytest
+COPY requirements.txt requirements.txt
+
+RUN pip install -r requirements.txt
 
 COPY entrypoint.sh /entrypoint.sh
 
