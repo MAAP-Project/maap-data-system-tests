@@ -22,12 +22,12 @@ def main():
     if re.fullmatch(r"refs/pull/\d+/merge", stage):
         stage = "dit"
 
-    output_path_prefix = os.environ.get("GITHUB_WORKSPACE", "")
+    output_path_prefix = os.environ.get("GITHUB_WORKSPACE", ".")
 
-    for input_path in [f for f in glob.glob("./tests/*.ipynb") if not f.endswith("-output.ipynb")]:
+    for input_path in [f for f in glob.glob("*.ipynb") if not f.endswith("-output.ipynb")]:
         try:
             output_path_filename = re.sub(
-                " ^ (.*)\.ipynb$", r"\1-output.ipynb", input_path)
+                "^(.*)\.ipynb$", r"\1-output.ipynb", input_path)
             output_path = f"{output_path_prefix}/{output_path_filename}"
             pm.execute_notebook(
                 input_path=input_path,
@@ -44,12 +44,12 @@ def main():
         for (k, v) in failure_results.items():
             print(f"File {k} => {v}")
         exit(1)
-
-    print(f"Successfully ran {len(success_results)} test notebooks.")
-    for x in success_results:
-        print(f"File {x}")
-
-    exit(0)
+    elif not success_results:
+      print("No test notebooks were run")
+      exit(1)
+    else:
+      print(f"Ran {len(success_results)} test notebooks successfully: {success_results}")
+      exit(0)
 
 
 if __name__ == "__main__":
