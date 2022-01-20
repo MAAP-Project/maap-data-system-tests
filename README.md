@@ -63,7 +63,7 @@ Additionally, these parameters can be passed, through the default values in the 
 
 The workflow can be manually invoked when testing it using the following steps.
 
-0. The App is [maap-system-tests](https://github.com/settings/apps/maap-system-tests) and is part of the MAAP-Project org.
+0. [maap-system-tests](https://github.com/settings/apps/maap-system-tests) is a "github app" of the MAAP-Project org.
 
 1. Copy the PEM file (e.g., maap-system-tests.2021-11-23.private-key.pem) somewhere.
 
