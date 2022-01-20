@@ -4,3 +4,4 @@ pytest
 lxml
 beautifulsoup4
 Pillow
+cogeo-mosaic
