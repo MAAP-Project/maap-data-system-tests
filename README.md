@@ -12,9 +12,13 @@
 
 ## GitHub App Creation and Installation
 
-The GitHub App is used as the authentication principal in GitHub that has been granted
-fine-grained permissions to perform actions in this repo. In this case, the only permission
-granted is to invoke the `workflow_dispatch` Action.
+A GitHub App is used as an authentication principal within GitHub that can be granted
+fine-grained permissions to perform actions within a repo. This allows clients to perform authorized actions in GitHub without needing to use credentials for a specific user.  
+
+The GitHub App [maap-system-tests](https://github.com/settings/apps/maap-system-tests) has been created
+to be used by GitHub Actions in the service repos to invoke the system tests in this repo. 
+In this case, a single permission granted is granted to allow invocation of the `workflow_dispatch`
+Action.
 
 The [Creating a GitHub App
 ](https://docs.github.com/en/developers/apps/building-github-apps/creating-a-github-app) describes how to create a new app. The relevant permission for this app is "Actions", and "Read and Write" is required to invoke a workflow dispatch.  Homepage URL is required, but can just be set to `https://www.maap-project.org`. Add a private key to get a PEM that can be used in the auth steps if one has not yet been created.
@@ -59,7 +63,7 @@ Additionally, these parameters can be passed, through the default values in the 
 
 The workflow can be manually invoked when testing it using the following steps.
 
-0. The App is [https://github.com/settings/apps/maap-system-tests](https://github.com/settings/apps/maap-system-tests). It's currently part of Phil's account, but will be moved to the MAAP-Project org as soon as we can coordinate it.
+0. [maap-system-tests](https://github.com/settings/apps/maap-system-tests) is a "github app" of the MAAP-Project org.
 
 1. Copy the PEM file (e.g., maap-system-tests.2021-11-23.private-key.pem) somewhere.
 
@@ -102,7 +106,7 @@ curl -s -o /dev/null -w "%{http_code}\n" -X POST -H "Authorization: Bearer ${API
 ## Running the Notebook Manually
 
 1. Install the Python dependencies with `pip install -r requirements.txt`
-2. Run with `papermill system-tests.ipynb system-tests-out.ipynb`
+2. Run with `papermill system-tests.ipynb system-tests-output.ipynb`
 
 ## Notebook Input Parameters
 
