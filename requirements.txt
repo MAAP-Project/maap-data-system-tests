@@ -3,3 +3,4 @@ papermill~=2.3.3
 pytest
 lxml
 beautifulsoup4
+Pillow
