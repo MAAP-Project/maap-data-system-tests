@@ -10,6 +10,6 @@ inputs:
     # description: 'The result'
 runs:
   using: 'docker'
-  image: 'Dockerfile.gh_action'
+  image: './Dockerfile.gh_action'
   args:
     - ${{ inputs.stage }}
