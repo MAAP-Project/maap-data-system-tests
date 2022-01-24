@@ -40,7 +40,7 @@ jobs:
       - run: echo "Stage is ${{ env.STAGE }}"  
 
       - name: Run the tests
-        uses: ./
+        uses: actions/run-jupyter-notebook
         id: test_run
         with:
           stage: ${{ env.STAGE }} 
