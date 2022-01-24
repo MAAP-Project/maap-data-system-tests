@@ -39,7 +39,7 @@ jobs:
 
       - run: echo "Stage is ${{ env.STAGE }}"  
 
-      - name: Run the tests
+      - name: Run the Test Notebooks
         uses: MAAP-Project/maap-data-system-tests@1.0.0
         id: test_run
         with:
