@@ -14,6 +14,4 @@ RUN pip install -r requirements.txt
 
 COPY entrypoint.sh /entrypoint.sh
 
-USER 1001
-
 ENTRYPOINT ["/entrypoint.sh"]
