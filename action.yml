@@ -10,6 +10,6 @@ inputs:
     # description: 'The result'
 runs:
   using: 'docker'
-  image: 'ghcr.io/maap-project/maap-data-system-tests:pr-11'
+  image: 'ghcr.io/maap-project/maap-data-system-tests:pr-11' # todo: main?
   args:
     - ${{ inputs.stage }}
