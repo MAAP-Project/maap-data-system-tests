@@ -46,7 +46,7 @@ jobs:
         with:
           stage: ${{ env.STAGE }}
       
-      - run: cat geckodriver.log
+      - run: find . -name geckodriver.log | xargs cat
 
       # - name: Upload Notebook Output
       #   uses: actions/upload-artifact@v2
