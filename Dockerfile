@@ -1,4 +1,4 @@
-FROM mas.ops.maap-project.org/root/jupyter-image/vanilla:develop
+FROM ghcr.io/maap-project/maap-data-system-tests:pr-11
 
 RUN apt-get update && \
       apt-get install firefox-esr -y && \

@@ -1,0 +1,1 @@
+FROM mas.ops.maap-project.org/root/jupyter-image/vanilla:develop
