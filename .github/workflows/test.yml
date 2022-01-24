@@ -40,10 +40,13 @@ jobs:
       - run: echo "Stage is ${{ env.STAGE }}"  
 
       - name: Run the tests
+        continue-on-error: true
         uses: ./
         id: test_run
         with:
-          stage: ${{ env.STAGE }} 
+          stage: ${{ env.STAGE }}
+      
+      - run: cat geckodriver.log
 
       # - name: Upload Notebook Output
       #   uses: actions/upload-artifact@v2

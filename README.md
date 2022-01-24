@@ -114,7 +114,7 @@ Visual Studio Code also offers support for running a notebook.
 
 ## Running a Notebook from within the Docker Container
 
-1. `docker build . -t mdst`
+1. `docker build . -t mdst --no-cache`
 2. `docker run -it --mount type=bind,source="$(pwd)/tests",target=/workdir --workdir /workdir --entrypoint /bin/bash mdst`
 3. Run a notebook with `papermill some-tests.ipynb some-tests-output.ipynb`
 
