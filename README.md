@@ -5,7 +5,8 @@
   - [GitHub Docker Container Action Creation](#github-docker-container-action-creation)
   - [Invoking the Repository Workflow from another Repo](#invoking-the-repository-workflow-from-another-repo)
   - [Manually Invoking the Repository Workflow with GitHub App Authentication](#manually-invoking-the-repository-workflow-with-github-app-authentication)
-  - [Running the Notebook Manually](#running-the-notebook-manually)
+  - [Running a Notebook Locally](#running-a-notebook-locally)
+  - [Running a Notebook from within the Docker Container](#running-a-notebook-from-within-the-docker-container)
   - [Notebook Input Parameters](#notebook-input-parameters)
   - [Installing maap-py](#installing-maap-py)
   - [References](#references)
@@ -103,10 +104,19 @@ curl -s -o /dev/null -w "%{http_code}\n" -X POST -H "Authorization: Bearer ${API
 
 6. Go to the [System Tests Workflow](https://github.com/MAAP-Project/maap-data-system-tests/actions/workflows/test.yml) page to see that the workflow is running.
 
-## Running the Notebook Manually
+## Running a Notebook Locally
 
-1. Install the Python dependencies with `pip install -r requirements.txt`
-2. Run with `papermill system-tests.ipynb system-tests-output.ipynb`
+1. Create a Python virtual environment with 3.7.8
+2. Install the Python dependencies with `pip install -r requirements.txt`
+3. Run a notebook with `papermill some-tests.ipynb some-tests-output.ipynb`
+
+Visual Studio Code also offers support for running a notebook.
+
+## Running a Notebook from within the Docker Container
+
+1. `docker build . -t mdst`
+2. `docker run -it --mount type=bind,source="$(pwd)/tests",target=/workdir --workdir /workdir --entrypoint /bin/bash mdst`
+3. Run a notebook with `papermill some-tests.ipynb some-tests-output.ipynb`
 
 ## Notebook Input Parameters
 
