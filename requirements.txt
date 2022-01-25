@@ -5,4 +5,3 @@ lxml
 beautifulsoup4
 Pillow
 cogeo-mosaic
-selenium
