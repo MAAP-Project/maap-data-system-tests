@@ -1,3 +1,7 @@
 ipykernel~=6.4.1
 papermill~=2.3.3
 pytest
+lxml
+beautifulsoup4
+Pillow
+cogeo-mosaic
