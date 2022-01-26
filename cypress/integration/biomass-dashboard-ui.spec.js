@@ -9,7 +9,7 @@ describe('biomass dashboard ui', () => {
         return "https://earthdata.nasa.gov/maap-biomass"
       else if (stage == "staging")
         return "https://uat.earthdata.nasa.gov/maap-biomass"
-      else if (["main", "dit"].includes(stage))
+      else if (["main", "dit"].includes(stage) || stage.startsWith("refs"))
         return "https://biomass.dit.maap-project.org"
     })();
 
