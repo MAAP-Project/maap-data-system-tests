@@ -2,18 +2,18 @@
 
 describe('biomass dashboard ui', () => {
   beforeEach(() => {
-    // if stage == "production":
-    //   return "https://earthdata.nasa.gov/maap-biomass"
-    // elif stage == "staging":
-    // return "https://uat.earthdata.nasa.gov/maap-biomass"
-    // elif stage in ["main", "dit"]:
-    // return "https://biomass.dit.maap-project.org"
 
-    // Cypress starts out with a blank slate for each test
-    // so we must tell it to visit our website with the `cy.visit()` command.
-    // Since we want to visit the same URL at the start of all our tests,
-    // we include it in our beforeEach function so that it runs before each test
-    cy.visit('https://biomass.dit.maap-project.org')
+    const url = (() => {
+      const stage = Cypress.env('STAGE')
+      if (stage == "production")
+        return "https://earthdata.nasa.gov/maap-biomass"
+      else if (stage == "staging")
+        return "https://uat.earthdata.nasa.gov/maap-biomass"
+      else if (["main", "dit"].includes(stage))
+        return "https://biomass.dit.maap-project.org"
+    })();
+
+    cy.visit(url)
   })
 
 

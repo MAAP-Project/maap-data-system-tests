@@ -52,4 +52,4 @@ jobs:
       - run: npm install
       - run: npx browserslist@latest --update-db
 
-      - run: npx cypress run
+      - run: npx cypress run --env STAGE=${{ env.STAGE }}
