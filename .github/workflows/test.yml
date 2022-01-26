@@ -50,5 +50,6 @@ jobs:
           node-version: '16'
 
       - run: npm install
+      - run: npx browserslist@latest --update-db
 
       - run: npx cypress run
