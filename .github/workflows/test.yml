@@ -5,13 +5,13 @@ on:
       - main
       - staging
   workflow_dispatch:
-      inputs:
-        stage:
-          description: 'Stage'
-          required: false
-          default: 'production'
+    inputs:
+      stage:
+        description: 'Stage'
+        required: false
+        default: 'production'
   schedule:
-   - cron:  '43 3 * * *' # daily
+    - cron: '43 3 * * *' # daily
   pull_request:
     branches:
       - main
@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Extract branch name
         id: extract_branch
         shell: bash
@@ -37,16 +37,18 @@ jobs:
         run: echo "STAGE=${{ github.event.inputs.stage }}" >> $GITHUB_ENV
         if: github.event.inputs.stage
 
-      - run: echo "Stage is ${{ env.STAGE }}"  
+      - run: echo "Stage is ${{ env.STAGE }}"
 
-      - name: Run the tests
-        uses: ./
-        id: test_run
-        with:
-          stage: ${{ env.STAGE }} 
-
-      # - name: Upload Notebook Output
-      #   uses: actions/upload-artifact@v2
+      # - name: Run the tests
+      #   uses: ./
+      #   id: test_run
       #   with:
-      #     path: '*-output.ipynb'
-      #     if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
+      #     stage: ${{ env.STAGE }}
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - run: npm install
+
+      - run: npx cypress run
