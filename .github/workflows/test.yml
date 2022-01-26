@@ -16,8 +16,6 @@ on:
     branches:
       - main
 
-# env:
-
 jobs:
   system-test:
     runs-on: ubuntu-latest
@@ -39,12 +37,6 @@ jobs:
 
       - run: echo "Stage is ${{ env.STAGE }}"
 
-      # - name: Run the tests
-      #   uses: ./
-      #   id: test_run
-      #   with:
-      #     stage: ${{ env.STAGE }}
-
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
@@ -53,3 +45,9 @@ jobs:
       - run: npx browserslist@latest --update-db
 
       - run: npx cypress run --env STAGE=${{ env.STAGE }}
+
+      - name: Run the tests
+        uses: ./
+        id: test_run
+        with:
+          stage: ${{ env.STAGE }}
