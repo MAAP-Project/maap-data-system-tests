@@ -46,7 +46,7 @@ jobs:
 
       - run: npx cypress run --env STAGE=${{ env.STAGE }}
 
-      - name: Run the tests
+      - name: Run the Notebook Tests 
         uses: ./
         id: test_run
         with:
