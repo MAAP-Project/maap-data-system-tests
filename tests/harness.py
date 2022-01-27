@@ -7,7 +7,7 @@ from multiprocessing import Pool
 from functools import partial
 
 
-def f(stage, input_path):
+def run_single_test(stage, input_path):
     output_path_prefix = os.environ.get("GITHUB_WORKSPACE", ".")
 
     try:
@@ -39,9 +39,9 @@ def main():
     if re.fullmatch(r"refs/pull/\d+/merge", stage):
         stage = "dit"
 
-    g = partial(f, stage)
+    run_single_test_with_stage = partial(run_single_test, stage)
     with Pool(10) as p:
-        results = p.map(g, [nbf for nbf in glob.glob("*.ipynb")
+        results = p.map(run_single_test_with_stage, [nbf for nbf in glob.glob("*.ipynb")
                             if not nbf.endswith("-output.ipynb")])
 
     failure_results = [r for r in results if r[1] != None]
