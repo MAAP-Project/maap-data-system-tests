@@ -3,6 +3,26 @@ import glob
 import re
 import argparse
 import os
+from multiprocessing import Pool
+from functools import partial
+
+
+def f(stage, input_path):
+    output_path_prefix = os.environ.get("GITHUB_WORKSPACE", ".")
+
+    try:
+        output_path_filename = re.sub(
+            "^(.*)\.ipynb$", r"\1-output.ipynb", input_path)
+        output_path = f"{output_path_prefix}/{output_path_filename}"
+        pm.execute_notebook(
+            input_path=input_path,
+            output_path=output_path,
+            parameters={"stage": stage},
+            progress_bar=False,
+        )
+        return (input_path, None)
+    except pm.exceptions.PapermillExecutionError as e:
+        return (input_path, e)
 
 
 def main():
@@ -13,43 +33,31 @@ def main():
                         help="stage to execute against")
     args = parser.parse_args()
 
-    success_results = []
-    failure_results = {}
-
     stage = args.stage
 
     # Pull Requests should be tested against the dit env
     if re.fullmatch(r"refs/pull/\d+/merge", stage):
         stage = "dit"
 
-    output_path_prefix = os.environ.get("GITHUB_WORKSPACE", ".")
+    g = partial(f, stage)
+    with Pool(10) as p:
+        results = p.map(g, [nbf for nbf in glob.glob("*.ipynb")
+                            if not nbf.endswith("-output.ipynb")])
 
-    for input_path in [f for f in glob.glob("*.ipynb") if not f.endswith("-output.ipynb")]:
-        try:
-            output_path_filename = re.sub(
-                "^(.*)\.ipynb$", r"\1-output.ipynb", input_path)
-            output_path = f"{output_path_prefix}/{output_path_filename}"
-            pm.execute_notebook(
-                input_path=input_path,
-                output_path=output_path,
-                parameters={"stage": stage},
-                progress_bar=False,
-            )
-            success_results.append(input_path)
-        except pm.exceptions.PapermillExecutionError as e:
-            failure_results[input_path] = e
+    failure_results = [r for r in results if r[1] != None]
 
-    if failure_results:
-        print("Failures:")
-        for (k, v) in failure_results.items():
-            print(f"File {k} => {v}")
+    if not results:
+        print("No test notebooks were run")
         exit(1)
-    elif not success_results:
-      print("No test notebooks were run")
-      exit(1)
+    if failure_results:
+        print("Failure!")
+        for r in failure_results:
+            print(f"Failed: {r[0]} => {r[1]}")
+        exit(1)
     else:
-      print(f"Ran {len(success_results)} test notebooks successfully: {success_results}")
-      exit(0)
+        print(
+            f"Success! Ran {len(results)} test notebooks: {[r[0] for r in results]}")
+        exit(0)
 
 
 if __name__ == "__main__":
