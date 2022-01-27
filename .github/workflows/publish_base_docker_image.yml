@@ -1,9 +1,12 @@
 name: Create and publish a Docker image to use in the GH Action
 
 on:
+  push:
+    branches:
+      - main
   schedule:
-    - cron:  '32 2 * * *' # once a day
-  pull_request: # todo: comment out after committed
+    - cron: '32 2 * * *' # once a day
+  pull_request:
     branches:
       - main
 
