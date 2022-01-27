@@ -8,6 +8,7 @@
   - [Running the Notebook Manually](#running-the-notebook-manually)
   - [Notebook Input Parameters](#notebook-input-parameters)
   - [Installing maap-py](#installing-maap-py)
+  - [Running Cypress](#running-cypress)
   - [References](#references)
 
 ## GitHub App Creation and Installation
@@ -121,6 +122,12 @@ inject a cell after this one with all of the passed parameters as Python variabl
 3. Clone maap-py with `git clone git@github.com:MAAP-Project/maap-py.git`
 4. `cd maap-py` then `python setup.py install`
 
+## Running Cypress
+
+```
+npm install
+npx cypress open
+```
 ## References
 
 - Running GitHub Actions locally using act: https://github.com/nektos/act

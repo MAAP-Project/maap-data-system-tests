@@ -1,5 +1,11 @@
+
+# cypress creates mp4 files for recordings of test execution
+*.mp4
+
 *-output.ipynb
 *.pem
+
+node_modules/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
