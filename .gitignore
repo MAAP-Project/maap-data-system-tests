@@ -1,6 +1,7 @@
 
 # cypress creates mp4 files for recordings of test execution
-*.mp4
+cypress/videos/
+cypress/screenshots/
 
 *-output.ipynb
 *.pem
