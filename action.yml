@@ -5,11 +5,9 @@ inputs:
   stage:
     description: Stage / environment on which the tests will be invoked
     required: true
-# outputs:
-  # output_1: # id of output
-    # description: 'The result'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  # replace with 'Dockerfile' to build when action is run
+  image: 'ghcr.io/maap-project/maap-data-system-tests:main'
   args:
     - ${{ inputs.stage }}
