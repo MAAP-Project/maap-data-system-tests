@@ -7,6 +7,7 @@ inputs:
     required: true
 runs:
   using: 'docker'
-  image: 'ghcr.io/maap-project/maap-data-system-tests:pr-13' # todo: main?
+  # replace with 'Dockerfile' to build when action is run
+  image: 'ghcr.io/maap-project/maap-data-system-tests:main'
   args:
     - ${{ inputs.stage }}

@@ -5,6 +5,7 @@
   - [GitHub Docker Container Action Creation](#github-docker-container-action-creation)
   - [Invoking the Repository Workflow from another Repo](#invoking-the-repository-workflow-from-another-repo)
   - [Manually Invoking the Repository Workflow with GitHub App Authentication](#manually-invoking-the-repository-workflow-with-github-app-authentication)
+  - [Using a pre-built Docker image or building within Action run](#using-a-pre-built-docker-image-or-building-within-action-run)
   - [Running a Notebook Locally](#running-a-notebook-locally)
   - [Running a Notebook from within the Docker Container](#running-a-notebook-from-within-the-docker-container)
   - [Notebook Input Parameters](#notebook-input-parameters)
@@ -105,6 +106,23 @@ curl -s -o /dev/null -w "%{http_code}\n" -X POST -H "Authorization: Bearer ${API
 
 6. Go to the [System Tests Workflow](https://github.com/MAAP-Project/maap-data-system-tests/actions/workflows/test.yml) page to see that the workflow is running.
 
+## Using a pre-built Docker image or building within Action run
+
+A Docker GitHub Action definition (e.g., [action.yml](action.yml)) defines a Docker
+image in the `image` attribute to run as a GitHub Action. This can either be a
+reference to a Dockerfile that is built during the Action run or as a Docker image name (e.g., `python`, `continuumio/miniconda3`, `ghcr.io/maap-project/maap-data-system-tests:main`) to pull from a Docker registry. The tradeoff to
+specifying a Dockerfile is that time is spent building it before running the tests
+each time, but it can also be kept up-to-date with the latest dependencies.
+
+A balance between these can be achieved by periodically building the image,
+publishing it to the GitHub Docker registry, and then using that image in the
+test runs.
+
+The primary drawback to this approach is that it's difficult to make changes to the image and test those changes in the same test run. The process for doing this is as follows:
+
+1. In action.yml, change the `image` value from `ghcr.io/maap-project/maap-data-system-tests:main` to `Dockerfile` to validate that the image changes work.
+2. Push these changes to a branch and create a PR for the branch. This will push an image to the GitHub Docker repo (ghcr.io) with a tag like `pr-13`, corresponding to the id of the PR, resulting in an image value like `ghcr.io/maap-project/maap-data-system-tests:pr-13`. Commit and push this change to the remote branch, and validate the Action runs successfully. Then, change the `image` back to use the `main` tag, commit, and push this change. Note that his may cause the Action run to fail, since it will run with the current `main` tag rather than our new one. After merging to main, the new main tag will be published, but the Action run may fail because it *may* still using the old main tag, depending on if the image build completes before or after the  Action that uses the image starts running. If it does fail, simply re-run it to get the latest `main` image, at which point it should succeed.
+
 ## Running a Notebook Locally
 
 1. Create a Python virtual environment with 3.7.8
@@ -138,6 +156,7 @@ inject a cell after this one with all of the passed parameters as Python variabl
 npm install
 npx cypress open
 ```
+
 ## References
 
 - Running GitHub Actions locally using act: https://github.com/nektos/act
