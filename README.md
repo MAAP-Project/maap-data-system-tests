@@ -1,6 +1,7 @@
 # MAAP Data System Services System Tests
 
 - [MAAP Data System Services System Tests](#maap-data-system-services-system-tests)
+  - [Handling Failing Tests](#handling-failing-tests)
   - [GitHub App Creation and Installation](#github-app-creation-and-installation)
   - [GitHub Docker Container Action Creation](#github-docker-container-action-creation)
   - [Invoking the Repository Workflow from another Repo](#invoking-the-repository-workflow-from-another-repo)
@@ -12,6 +13,20 @@
   - [Installing maap-py](#installing-maap-py)
   - [Running Cypress](#running-cypress)
   - [References](#references)
+
+## Handling Failing Tests
+
+There's not a good way to skip failing tests.
+
+If an entire Notebook needs to be skipped, rename it with a suffix like `.skip-ipynb`.
+
+If there's a problem with a single stage, put the tests in a block guarded for the failing stage and with a comment with `SKIP` in it (for periodically searching for failing tests that may have been forgotten about) like:
+
+```
+if stage != "dit":  # SKIP until dit and production are fixed
+```
+
+Wrapping the code in a block like this is annoying, but there's no other way to prematurely exit a Notebook without it being seen as a failure while running the notebook.
 
 ## GitHub App Creation and Installation
 

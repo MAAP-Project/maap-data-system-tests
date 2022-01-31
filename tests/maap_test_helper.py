@@ -4,9 +4,9 @@ from typing import Union, Any, Tuple, Iterable
 
 
 def populate_maap_api_host(stage):
+    stage = stage if stage != "main" else "dit"
     if stage == "production":
-        env_prefix = "ops."
-    elif stage in ["main", "dit"]:
+        # env_prefix = "ops." after services are migrated, this should be ops
         env_prefix = ""
     else:
         env_prefix = f"{stage}."
