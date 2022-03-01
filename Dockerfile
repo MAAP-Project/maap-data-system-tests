@@ -1,6 +1,6 @@
 FROM continuumio/miniconda3:4.7.12
 
-RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir --upgrade pip --update setuptools
 
 # install maap-py library
 ENV MAAP_CONF='/projects/maap-py/'
