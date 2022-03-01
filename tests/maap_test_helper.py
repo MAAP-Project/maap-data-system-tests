@@ -12,6 +12,15 @@ def populate_maap_api_host(stage):
         env_prefix = f"{stage}."
     return f"api.{env_prefix}maap-project.org"
 
+def populate_maap_host(stage, prefix):
+    stage = stage if stage != "main" else "dit"
+    if stage == "production":
+        # env_prefix = "ops." after services are migrated, this should be ops
+        env_prefix = ""
+    else:
+        env_prefix = f"{stage}."
+    return f"{prefix}.{env_prefix}maap-project.org"
+
 
 def fetch_results(maap, collection={}, query={}, timeout=180):
     """
