@@ -17,7 +17,7 @@ describe('UMF (questionaire) ui', () => {
     cy.title().should('eq', 'MAAP User Shared Data Questionnaire')
   })
 
-  it('should have a visible Start button, () => {
+  it('should have a visible Start button', () => {
     cy.get('body > div > div > div > div > div.details_holder > div > div:nth-child(1) > button')
       .should('have.text', 'Start New')
   })
