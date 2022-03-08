@@ -14,7 +14,8 @@ describe('mmt ui', () => {
   })
 
   it('should have the correct title', () => {
-    cy.title().should('eq', 'Metadata Management Tool')
+    cy.title()
+      .should('eq', 'Metadata Management Tool')
   })
 
   it('should have populated the about MMT box', () => {

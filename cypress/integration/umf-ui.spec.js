@@ -14,7 +14,8 @@ describe('UMF (questionaire) ui', () => {
   })
 
   it('should have the correct title', () => {
-    cy.title().should('eq', 'MAAP User Shared Data Questionnaire')
+    cy.title()
+      .should('eq', 'MAAP User Shared Data Questionnaire')
   })
 
   it('should have a visible Start button', () => {
