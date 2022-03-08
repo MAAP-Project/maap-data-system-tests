@@ -5,9 +5,9 @@ describe('UMF (questionaire) ui', () => {
     const url = (() => {
       const stage = Cypress.env('STAGE')
       if (stage == "production")
-        return "https://questionaire.maap-project.org"
+        return "https://questionnaire.maap-project.org"
       else if (["main", "dit"].includes(stage) || stage.startsWith("refs"))
-        return "https://questionaire.dit.maap-project.org"
+        return "https://questionnaire.dit.maap-project.org"
     })();
 
     cy.visit(url)
