@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-xdescribe('biomass dashboard ui', () => {
+describe('biomass dashboard ui', () => {
   beforeEach(() => {
 
     const url = (() => {
@@ -10,7 +10,8 @@ xdescribe('biomass dashboard ui', () => {
       else if (stage == "staging")
         return "https://uat.earthdata.nasa.gov/maap-biomass"
       else if (["main", "dit"].includes(stage) || stage.startsWith("refs"))
-        return "https://biomass.dit.maap-project.org"
+        return 'https://earthdata.nasa.gov/maap-biomass'
+        //return "https://biomass.dit.maap-project.org"
     })();
 
     cy.visit(url)
