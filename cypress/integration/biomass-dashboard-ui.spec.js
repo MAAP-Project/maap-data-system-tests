@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('biomass dashboard ui', () => {
+xdescribe('biomass dashboard ui', () => {
   beforeEach(() => {
 
     const url = (() => {
