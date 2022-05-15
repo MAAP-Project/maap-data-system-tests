@@ -3,7 +3,7 @@ name: Create and publish a Docker image to use in the GH Action
 on:
   push:
     branches:
-      - main
+      # - main
       - ab/update-tests
   schedule:
     - cron: '32 2 * * *' # once a day
