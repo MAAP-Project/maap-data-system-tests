@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - ab/update-tests
   schedule:
     - cron: '32 2 * * *' # once a day
   pull_request:
