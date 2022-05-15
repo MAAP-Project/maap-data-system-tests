@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - staging
+      - ab/update-tests
   workflow_dispatch:
     inputs:
       stage:
