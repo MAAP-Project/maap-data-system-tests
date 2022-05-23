@@ -1,5 +1,5 @@
 {
-  "defaultCommandTimeout": 10000,
+  "defaultCommandTimeout": 15000,
   "viewportWidth": 1440,
   "viewportHeight": 900
 }

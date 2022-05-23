@@ -6,3 +6,4 @@ beautifulsoup4
 Pillow
 cogeo-mosaic
 black
+jupyter

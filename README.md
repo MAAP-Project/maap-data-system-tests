@@ -146,11 +146,17 @@ The primary drawback to this approach is that it's difficult to make changes to 
 
 Visual Studio Code also offers support for running a notebook.
 
-## Running a Notebook from within the Docker Container
+## Running a Notebook from within the Docker Container with Papermill
 
 1. `docker build . -t mdst --no-cache`
 2. `docker run -it --mount type=bind,source="$(pwd)/tests",target=/workdir --workdir /workdir --entrypoint /bin/bash mdst`
 3. Run a notebook with `papermill some-tests.ipynb some-tests-output.ipynb`
+
+## Running a Notebook from within the Docker Container with Jupyter
+
+1. Skip this step if you have already built the docker image: `docker build . -t mdst --no-cache`
+2. `docker run -it --mount type=bind,source="$(pwd)/tests",target=/workdir --workdir /workdir -p 8888:8888 --entrypoint /bin/bash mdst`
+3. Run jupyter with `jupyter notebook --ip=0.0.0.0 --allow-root`
 
 ## Notebook Input Parameters
 
